@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+<!-- 
+		
+		# 로깅
+		
+			- log4j 로깅방식을 통해서 여러개발자가 협업을 하는 경우 로깅방법을 통일할 수 있다.
+		 	- log4j 를 이용하여 로그의 레벨별로 체계적인 로그관리가 가능하다.
+		 	- 로깅 레벨을 설정하면 그 이상 레벨을 로깅한다.
+		 	
+		 	
+		 	1) FATAL : 가장 심각한 에러 발생시 사용
+		 	2) ERROR : 일반 에러 발생시 사용
+		 	3) WARN  : 에러는 아니지만 주의할 필요가 있을경우 사용
+		 	4) INFO  : 일반 정보를 나타낼 경우 사용
+		 	5) DEBUG : 일반 정보를 상세히 나타낼 경우 사용
+	 		6) TRACE : 디버그 레벨이 너무 광범위한것을 해결하기 위해서 좀 더 상세한 이벤트를 나타내기 위해 사용
+		  	
+		
+		# 스프링 log 설정 방법 
+		
+			1) pom.xml에서 의존성 추가 (기본값)
+			2) log4j.xml 설정 파일에서 appenders 설정 및 추가
+		 	3) 클래스에서 Logger객체 생성 (private) static Logger logger = LoggerFactory.getLogger(클래스이름.class);
+
+	  	
+	  
+	-->
+
+
+	<!-- Appenders -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+		</layout>
+	</appender>
+	
+	<!-- DailyFile Appenders -->
+	<appender name="dailyFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="C:\\web_log\\logTest.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+		  <param name="DatePattern"   value="'.'yyyy-MM-dd-HH-mm"/>
+		  <param name="ConversionPattern"   value="[%d{HH:mm:ss}][%-5p](%F:%L)-%m%n"/>
+		</layout>
+	</appender>
+	
+	<!--
+	 
+	 	# DatePattern
+	 
+		 '.'yyyy-MM		     : 매달 시작 일에 로그 파일 변경 
+		 '.'yyyy-ww		     : 매주 시작 일에 로그 파일 변경 
+		 '.'yyyy-MM-dd		 : 매일 자정에 로그 파일 변경 
+		 '.'yyyy-MM-dd-a 	 : 자정과 정오에 로그 파일 변경 
+		 '.'yyyy-MM-dd-HH  	 : 매 시간마다 로그 파일 변경 
+		 '.'yyyy-MM-dd-HH-mm : 매 분마다 로그 파일 변경 
+		
+		# ConversionPattern
+	 	
+	 	 %P : 	debug, info, warn, error, fatal 등 priority 출력
+		 %m	:	로그 내용 출력 
+		 %d	:	발생 시간 출력
+		 %t	:	발생 쓰레드의 이름 출력
+		 %n	:	개행 문자 출력 
+		 %c	:	패키지 출력 / {숫자} 를 이용하여 단계별 출력, ex) %x{5} 
+		 %C	:	클래스 명 출력 / {숫자} 를 이용하여 단계별 출력, ex) %x{5}   
+		 %F	:	프로그램 파일 명 출력 
+		 %I	:	로깅이 발생한 caller 의 정보 출력 
+		 %L	:	로깅이 발생한 caller 의 라인 수 출력 
+		 %M	:	로깅이 발생한 method 명 출력 
+		 %r	:	애플리케이션 시작 이후 로깅이 발생한 시점의 시간 출력(millisecond)
+		 %x	:	NDC 에 저장된 내용 출력 
+		 %X	:	MDC 에 저장된 내용 출력 
+	 
+	-->
+	
+	
+	<!-- Application Loggers -->
+	<logger name="com.spring.aop">
+		<level value="info" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+
+	<!-- Root Logger -->
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="console" />
+		<appender-ref ref="dailyFileAppender" />
+	</root>
+	
+</log4j:configuration>
